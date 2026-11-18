@@ -16,7 +16,8 @@ enum ProjectFileKind {
 }
 
 struct CompletionItem {
-    /// What the typed text is compared with. An exact match closes the list, so Enter makes a new line.
+    /// What the typed text is compared with. An exact match closes the list, so Enter makes a new line,
+    /// except for commands that still have braces or longer names to offer (\cite, \citep).
     let name: String
     let insert: String
     let title: String
@@ -240,6 +241,8 @@ final class CompletionList: NSObject, NSTableViewDataSource, NSTableViewDelegate
     }
 
     var isVisible: Bool { panel.isVisible }
+
+    var selectedItem: CompletionItem? { items.indices.contains(table.selectedRow) ? items[table.selectedRow] : nil }
 
     func show(_ entries: [CompletionItem], caret: NSRect, in window: NSWindow) {
         items = entries

@@ -1221,8 +1221,16 @@ final class EditorViewController: NSViewController, NSTextViewDelegate {
         }
         let query = (textView.string as NSString).substring(with: context.range)
         let items = completionItems(context, query: query)
-        // Once the word is complete, return must make a new line instead of accepting.
-        guard !items.isEmpty, !items.contains(where: { $0.name == query }) else {
+        // A complete command stays listed while accepting it still adds something: its braces
+        // (\cite → \cite{}) or a longer sibling (\cite → \citep). Anything else that's already
+        // complete closes the list, so return makes a new line.
+        let hide: Bool
+        if case .command = context.kind {
+            hide = items.isEmpty || items.allSatisfy { $0.name == query && $0.insert == query }
+        } else {
+            hide = items.isEmpty || items.contains(where: { $0.name == query })
+        }
+        guard !hide else {
             completer.hide()
             return
         }
@@ -1285,6 +1293,12 @@ final class EditorViewController: NSViewController, NSTextViewDelegate {
             case #selector(NSResponder.moveDown(_:)):
                 completer.moveSelection(by: 1)
             case #selector(NSResponder.insertNewline(_:)), #selector(NSResponder.insertTab(_:)):
+                // A command already complete with nothing to add (\in, \item): return does its usual job.
+                if let item = completer.selectedItem, let context = completionContext(), case .command = context.kind,
+                   item.insert == (textView.string as NSString).substring(with: context.range) {
+                    completer.hide()
+                    return false
+                }
                 completer.acceptSelection()
             case #selector(NSResponder.cancelOperation(_:)):
                 completer.hide()
