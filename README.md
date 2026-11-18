@@ -33,6 +33,8 @@ Walras opens any folder with `.tex` files as a project. It uses the TeX distribu
 - **Copy as image** (⌃⌘C): select an equation or a table and get a cropped, high-resolution PNG, also in a dark version (⌃⇧⌘C), ready for slides or a message.
 
 ### Complete as you type
+<p align="center"><img src="docs/screenshots/walras-autocomplete.png" alt="Autocomplete" width="820"></p>
+
 - Commands, including the ones you define with `\newcommand`, and environments, including your own theorems and boxes.
 - `\ref{}` and `\eqref{}` from every `\label` in the project, with the line it lives on.
 - `\cite{}` from the project's `.bib` **and from your Jevons library**: a paper you haven't cited yet is added to the bibliography when you pick it.
