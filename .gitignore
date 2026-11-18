@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Salidas de compilación
+build.log
+*.log
+
+# Respaldos viejos de antes de usar git (la historia ahora está en git)
+_respaldos/
+*.antes-*
+
+# Archivos que genera LaTeX al compilar el proyecto de prueba
+prueba/*.aux
+prueba/*.log
+prueba/*.out
+prueba/*.bbl
+prueba/*.blg
+prueba/*.fls
+prueba/*.fdb_latexmk
+prueba/*.synctex.gz
+prueba/*.pdf
